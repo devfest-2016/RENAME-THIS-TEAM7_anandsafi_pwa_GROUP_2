@@ -24,6 +24,10 @@ function Jams() {
   this.messageForm = document.getElementById('message-form');
   this.messageInput = document.getElementById('message');
   this.submitButton = document.getElementById('submit');
+
+  this.positionForm = document.getElementById('position-form');
+  this.positionInput = document.getElementById('position');
+
   this.submitImageButton = document.getElementById('submitImage');
   this.imageForm = document.getElementById('image-form');
   this.mediaCapture = document.getElementById('mediaCapture');
@@ -35,6 +39,7 @@ function Jams() {
 
   // Saves message on form submit.
   this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
+  this.positionForm.addEventListener('submit', this.saveEvent.bind(this));
   this.signOutButton.addEventListener('click', this.signOut.bind(this));
   this.signInButton.addEventListener('click', this.signIn.bind(this));
 
@@ -100,6 +105,30 @@ Jams.prototype.saveMessage = function(e) {
       console.error('Error adding new position to Firebase Database', error);
     });
   }
+};
+
+Jams.prototype.saveEvent = function(e) {
+  e.preventDefault();
+  debugger;
+  // Check that the user entered a message and is signed in.
+  // if (this.messageInput.value && this.checkSignedInWithMessage()) {
+    // var inputParts = this.messageInput.value.split(" @");
+
+    // Add a new message entry to the Firebase Database.
+    // this.messagesRef.child(inputParts[1]).child('positions').child(inputParts[0]).set({
+    //   events: {
+    //     "Applied": {
+    //       "date": "11/20/16"
+    //     }
+    //   }
+    // }).then(function() {
+      // Clear message text field and SEND button state.
+  //     Jams.resetMaterialTextfield(this.messageInput);
+  //     this.toggleButton();
+  //   }.bind(this)).catch(function(error) {
+  //     console.error('Error adding new position to Firebase Database', error);
+  //   });
+  // }
 };
 
 // Signs-in Friendly Chat.
@@ -184,7 +213,6 @@ Jams.POSITION_TEMPLATE =
     '</div>';
 
 function handleCompanyOnClick(e) {
-  console.log(e);
   var company = e.children[0].innerText;
   var position = e.children[1].innerText.split('\n')[0];
   var events = e.children[2].innerText.split('\n');
@@ -249,7 +277,7 @@ Jams.prototype.displayMessage = function(key, positions) {
 // Enables or disables the submit button depending on the values of the input
 // fields.
 Jams.prototype.toggleButton = function() {
-  if (this.messageInput.value) {
+  if (this.messageInput.value || this.positionInput.value) {
     this.submitButton.removeAttribute('disabled');
   } else {
     this.submitButton.setAttribute('disabled', 'true');

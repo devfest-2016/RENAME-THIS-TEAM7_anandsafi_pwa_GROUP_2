@@ -88,6 +88,7 @@ Jams.prototype.loadMessages = function() {
 // Saves a new message on the Firebase DB.
 Jams.prototype.saveMessage = function(e) {
   e.preventDefault();
+  var inputParts = this.messageInput.value.split(" @");
   // Check that the user entered a message and is signed in.
   if (this.messageInput.value && this.checkSignedInWithMessage()) {
 

@@ -1,0 +1,7 @@
+{
+  "name": "Job Application Management System",
+  "short_name": "Jams",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait"
+}

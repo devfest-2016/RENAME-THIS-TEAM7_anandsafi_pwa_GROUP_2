@@ -1,0 +1,8 @@
+service firebase.storage {
+  match /b/gdghackathon-964ae.appspot.com/o {
+    match /{userId}/{timeStamp}/{fileName} {
+      allow write: if request.auth.uid == userId;
+      allow read;
+    }
+  }
+}

@@ -170,10 +170,16 @@ Jams.resetMaterialTextfield = function(element) {
 
 // Template for messages.
 Jams.MESSAGE_TEMPLATE =
-    '<div class="message-container">' +
+    '<div class="message-container" onclick="handleCompanyOnClick(this)">' +
       '<div class="message"></div>' +
-      '<div class="name" onclick="console.log(this)"></div>' +
+      '<div class="name"></div>' +
     '</div>';
+
+function handleCompanyOnClick(e) {
+  var company = e.children[0].innerText;
+  var position = e.children[1].innerText.split('\n')[0];
+  console.log([company, position])
+}
 
 // A loading image URL.
 Jams.LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif';

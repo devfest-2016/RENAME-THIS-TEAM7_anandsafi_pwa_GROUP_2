@@ -61,6 +61,7 @@ Jams.prototype.initFirebase = function() {
 Jams.prototype.loadMessages = function() {
   // Reference to the /messages/ database path.
   this.messagesRef = this.database.ref('Companies');
+  window.databaseCall = this.messagesRef;
   // Make sure we remove all previous listeners.
   this.messagesRef.off();
 
@@ -173,12 +174,44 @@ Jams.MESSAGE_TEMPLATE =
     '<div class="message-container" onclick="handleCompanyOnClick(this)">' +
       '<div class="message"></div>' +
       '<div class="name"></div>' +
+      '<div hidden class="events"></div>' +
+    '</div>';
+
+Jams.POSITION_TEMPLATE =
+    '<div class="position-container">' +
+      '<div class="name"></div>' +
+      '<div class="note"></div>' +
     '</div>';
 
 function handleCompanyOnClick(e) {
+  console.log(e);
   var company = e.children[0].innerText;
   var position = e.children[1].innerText.split('\n')[0];
-  console.log([company, position])
+  var events = e.children[2].innerText.split('\n');
+  displayPosition(company, position, events);
+}
+
+function displayPosition(company, position, events) {
+  var dl = document.getElementById('position');
+  var de = document.getElementById('events');
+  events = events.map(e => {
+    var parts = e.split(' # ');
+    var name = parts[0];
+    var notes = parts[1];
+    return (
+      '<div class="position-container">' +
+        '<div style="font-weight: bold">' + name + '</div>' +
+        '<div>' + notes + '</div>' +
+      '</div>'
+    )
+  }).join('<br>');
+
+  var title =
+    '<div style="font-weight: bold; font-size: 16px;">' + position + '</div>' +
+    '<div style="font-style: italic">' + company + '</div>'
+
+  dl.innerHTML = title;
+  de.innerHTML = events;
 }
 
 // A loading image URL.
@@ -197,6 +230,11 @@ Jams.prototype.displayMessage = function(key, positions) {
   }
 
   div.querySelector('.name').innerHTML = Object.keys(positions).join('<br>');
+  div.querySelector('.events').innerHTML = Object.keys(positions[Object.keys(positions)[0]].events).map(k => {
+    let name = k + ' on ' + positions[Object.keys(positions)[0]].events[k].date;
+    let notes = positions[Object.keys(positions)[0]].events[k].notes || '';
+    return(name + ' # ' + notes);
+  }).join('<br>');
 
   var messageElement = div.querySelector('.message');
   messageElement.textContent = key;
